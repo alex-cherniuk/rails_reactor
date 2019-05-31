@@ -7,15 +7,10 @@ import Image
 def remove_duplicates(all_pairs):
     unique = []
     matched = []
-    for i, (key11, key12) in enumerate(all_pairs):
-        if key11 == key12:
+    for i, (key11, key12) in enumerate(set(all_pairs)):
+        if key11 == key12 or i in matched:
             continue
-        for j, (key21, key22) in enumerate(all_pairs[i + 1:]):
-            if key11 == key22 and key12 == key21 and j not in matched:
-                unique.append((key11, key12))
-                matched.append(j)
-                break
-        else:
+        if (key11, key12) not in unique and (key12, key11) not in unique:
             unique.append((key11, key12))
     return unique
 
@@ -78,7 +73,7 @@ class ImageAnalyser:
                     modifications_pairs.append((key1, key2))
                 elif hash_similarity > 0.85:
                     modifications_pairs.append((key1, key2))
-                elif hash_similarity > 0.75:
+                elif hash_similarity > 0.72:
                     similar_pairs.append((key1, key2))
 
         duplicates_pairs = remove_duplicates(duplicates_pairs)
